@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '@nestjs/common';
+import { Logger } from '@app/logger';
+import { UnhandledErrorFilter } from './filters/unhandled-error/unhandled-error.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,12 +24,10 @@ async function bootstrap() {
   }
 
   const port = configService.get('port');
-  const host = configService.get('host');
-  const appUrl = `http://${host}:${port}`;
 
-  await app.listen(port, () => {
-    Logger.debug('API is available at ' + appUrl);
-    Logger.debug('API docs are available at ' + appUrl + '/' + apiDocsEndpoint);
-  });
+  const logger = app.get(Logger);
+  app.useGlobalFilters(new UnhandledErrorFilter(logger));
+
+  await app.listen(port);
 }
 bootstrap();
