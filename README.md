@@ -5,6 +5,7 @@ POC to use [Nest](https://github.com/nestjs/nest) framework for Weyrk API
 ## Installation
 
 ```bash
+$ nvm use
 $ npm install
 ```
 
