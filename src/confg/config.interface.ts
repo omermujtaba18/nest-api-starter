@@ -1,6 +1,7 @@
 interface IConfiguration {
   port: number;
   env: string;
+  host: string;
   database: {
     username: string;
     password: string;
