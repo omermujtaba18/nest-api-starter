@@ -14,6 +14,7 @@ env:
 jobs:
   format:
     runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.event.head_commit.message, 'docs') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,6 +43,7 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.event.head_commit.message, 'docs') }}
     needs: format # Ensures the format job completes before e2e job starts
     steps:
       - name: Checkout code
