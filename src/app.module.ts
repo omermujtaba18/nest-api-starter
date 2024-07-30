@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { HealthModule } from './health/health.module';
+import { HealthModule } from './resources/health/health.module';
 import configuration from './confg/configuration';
 import { LoggerModule } from '@app/logger';
 
