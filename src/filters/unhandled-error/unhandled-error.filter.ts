@@ -4,6 +4,7 @@ import {
   Catch,
   HttpStatus,
   ExceptionFilter,
+  HttpException,
 } from '@nestjs/common';
 
 @Catch()
@@ -14,10 +15,25 @@ export class UnhandledErrorFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
-    this.logger.error('Unhandled error', { stack: (exception as any).stack });
+    let message, status;
 
-    response
-      .status(HttpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: 'Something went wrong!' });
+    if (exception instanceof HttpException) {
+      message = exception.getResponse();
+      status = exception.getStatus();
+    } else {
+      this.logger.error((exception as any).message, {
+        stack: (exception as any).stack,
+        error: exception as any,
+      });
+
+      message = {
+        message: 'Something went wrong!',
+        error: 'Unknown error',
+        statusCode: 500,
+      };
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+
+    response.status(status).json(message);
   }
 }
