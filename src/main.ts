@@ -3,17 +3,20 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from '@app/logger';
-import { UnhandledErrorFilter } from './filters/unhandled-error/unhandled-error.filter';
+import { UnhandledErrorFilter } from './common/filters/unhandled-error/unhandled-error.filter';
+import IConfiguration from './confg/config.interface';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
+  const configService = app.get(ConfigService<IConfiguration>);
 
   const env = configService.get('env');
   const apiDocsEndpoint = 'api-docs';
 
   if (env !== 'production') {
     const config = new DocumentBuilder()
+      .addBearerAuth()
       .setTitle('Weyrk API')
       .setVersion('1.0')
       .build();
@@ -26,6 +29,7 @@ async function bootstrap() {
   const port = configService.get('port');
 
   const logger = app.get(Logger);
+  app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new UnhandledErrorFilter(logger));
 
   await app.listen(port);

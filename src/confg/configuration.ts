@@ -5,10 +5,11 @@ export default (): IConfiguration => ({
   env: process.env.NODE_ENV || 'development',
   host: process.env.HOST || 'localhost',
   database: {
-    host: process.env.MONGODB_HOST || 'localhost',
-    port: parseInt(process.env.MONGODB_PORT as string, 10) || 27017,
-    username: process.env.MONGODB_USERNAME || 'docker',
-    password: process.env.MONGODB_PASSWORD || 'mongop',
-    database: process.env.MONGODB_DATABASE || 'weyrk',
+    uri:
+      process.env.DATABASE_URI ||
+      'mongodb://docker:mongopw@localhost:27017/nest-api?authSource=admin',
   },
+  jwtSecret: process.env.JWT_SECRET || 'secret',
+  googleClientID: process.env.GOOGLE_CLIENT_ID || 'some-client-id',
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || 'some-client-secret',
 });

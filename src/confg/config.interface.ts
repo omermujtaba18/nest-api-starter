@@ -3,12 +3,11 @@ interface IConfiguration {
   env: string;
   host: string;
   database: {
-    username: string;
-    password: string;
-    host: string;
-    port: number;
-    database: string;
+    uri: string;
   };
+  jwtSecret: string;
+  googleClientID: string;
+  googleClientSecret: string;
 }
 
 export default IConfiguration;
