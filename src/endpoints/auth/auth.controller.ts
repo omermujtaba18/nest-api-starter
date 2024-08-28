@@ -12,7 +12,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { Request, Response } from 'express';
 import { LoginDto } from './dto/login.dto';
-import { SkipJwtauth } from 'src/common/decorators/skip-jwtauth/skip-jwtauth.decorator';
+import { SkipJwtauth } from '../../common/decorators/skip-jwtauth/skip-jwtauth.decorator';
 import { SignupDto } from './dto/signup.dto';
 import { UserDocument } from '../users/schemas/users.schema';
 
