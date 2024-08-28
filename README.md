@@ -12,6 +12,7 @@ nest-starter kit using [Nest](https://github.com/nestjs/nest) framework for any 
 ```bash
 $ nvm use
 $ npm install
+$ cp .env.example .env
 ```
 
 ## Running the app
