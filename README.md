@@ -1,6 +1,11 @@
 ## Description
 
-POC to use [Nest](https://github.com/nestjs/nest) framework for Weyrk API
+next-starter kit using [Nest](https://github.com/nestjs/nest) framework for any API development
+
+### Features
+
+- Authentication with local, jwt and google strategies.
+- User management
 
 ## Installation
 
