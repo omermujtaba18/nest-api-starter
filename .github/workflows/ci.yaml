@@ -43,6 +43,17 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:6.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: docker
+          MONGO_INITDB_ROOT_PASSWORD: mongopw
+          MONGO_INITDB_DATABASE: nest-api-starter
+        ports:
+          - '27017:27017'
+
     if: ${{ !startsWith(github.event.head_commit.message, 'docs') }}
     needs: format # Ensures the format job completes before e2e job starts
     steps:
