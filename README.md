@@ -1,6 +1,6 @@
 ## Description
 
-next-starter kit using [Nest](https://github.com/nestjs/nest) framework for any API development
+nest-starter kit using [Nest](https://github.com/nestjs/nest) framework for any API development
 
 ### Features
 
