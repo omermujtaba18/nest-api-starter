@@ -4,6 +4,7 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { ConfigService } from '@nestjs/config';
 import IConfiguration from '../../../confg/config.interface';
 import { UsersService } from '../../../resources/users/users.service';
+import * as util from '../../../common/util';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -36,8 +37,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         email: emails[0].value,
       });
 
+      const tempPassword = util.generateSecret();
+
       if (user) {
         user.googleId = id;
+        user.password = tempPassword;
         await user.save();
         return done(null, user);
       }
@@ -45,6 +49,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       user = await this.usersService.create({
         email: emails[0].value,
         googleId: id,
+        password: tempPassword,
       });
 
       return done(null, user);
