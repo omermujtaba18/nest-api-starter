@@ -8,7 +8,7 @@ import IConfiguration from './confg/config.interface';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: false });
   const configService = app.get(ConfigService<IConfiguration>);
 
   const env = configService.get('env');
