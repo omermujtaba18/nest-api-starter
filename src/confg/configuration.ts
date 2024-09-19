@@ -12,4 +12,9 @@ export default (): IConfiguration => ({
   jwtSecret: process.env.JWT_SECRET || 'secret',
   googleClientID: process.env.GOOGLE_CLIENT_ID || 'some-client-id',
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || 'some-client-secret',
+  mail: {
+    apiKey: process.env.SENDGRID_API_KEY || 'your-sendgrid-api-key', // TODO: Add api key
+    defaultFromEmail: process.env.SENDGRID_DEFAULT_FROM_EMAIL || '', // TODO: Add default from email
+    defaultFromName: process.env.SENDGRID_DEFAULT_FROM_NAME || '', // TODO: Add default from name
+  },
 });

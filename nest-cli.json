@@ -5,7 +5,14 @@
   "compilerOptions": {
     "plugins": ["@nestjs/swagger"],
     "deleteOutDir": true,
-    "webpack": true
+    "webpack": true,
+    "assets": [
+      {
+        "include": "../libs/email/templates",
+        "outDir": "dist",
+        "watchAssets": true
+      }
+    ]
   },
   "projects": {
     "logger": {
@@ -15,6 +22,15 @@
       "sourceRoot": "libs/logger/src",
       "compilerOptions": {
         "tsConfigPath": "libs/logger/tsconfig.lib.json"
+      }
+    },
+    "email": {
+      "type": "library",
+      "root": "libs/email",
+      "entryFile": "index",
+      "sourceRoot": "libs/email/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/email/tsconfig.lib.json"
       }
     }
   }
