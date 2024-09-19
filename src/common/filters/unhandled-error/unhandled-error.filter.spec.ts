@@ -35,14 +35,17 @@ describe('UnhandledErrorFilter', () => {
 
     filter.catch(exception, mockArgumentsHost);
 
-    expect(logger.error).toHaveBeenCalledWith('Unhandled error', {
+    expect(logger.error).toHaveBeenCalledWith('Test error', {
       stack: exception.stack,
+      error: exception,
     });
     expect(mockResponse.status).toHaveBeenCalledWith(
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'Something went wrong!',
+      error: 'Unknown error',
+      statusCode: 500,
     });
   });
 });
