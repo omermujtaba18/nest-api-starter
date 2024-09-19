@@ -3,7 +3,6 @@ import { EmailService } from './email.service';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@app/logger';
 import * as sgMail from '@sendgrid/mail';
-import * as ejs from 'ejs';
 import * as path from 'path';
 
 jest.mock('@sendgrid/mail', () => ({
@@ -11,9 +10,13 @@ jest.mock('@sendgrid/mail', () => ({
   send: jest.fn(),
 }));
 
-jest.mock('ejs', () => ({
-  renderFile: jest.fn(),
-}));
+jest.mock('path', () => {
+  const originalPath = jest.requireActual('path');
+  return {
+    ...originalPath,
+    join: jest.fn(),
+  };
+});
 
 describe('EmailService', () => {
   let service: EmailService;
@@ -63,31 +66,25 @@ describe('EmailService', () => {
     expect(sgMail.setApiKey).toHaveBeenCalledWith('dummy-api-key');
   });
 
-  it('should send an email with the correct parameters', async () => {
-    const template = 'test-template';
+  it('should send an email with the correct parameters ', async () => {
+    const template = 'test-template'; // Corresponds to email/templates/test-template.ejs
     const to = 'test@example.com';
     const subject = 'Test Subject';
     const data = { name: 'John Doe' };
 
-    const renderedHtml = '<html><body>Test email content</body></html>';
-    (ejs.renderFile as jest.Mock).mockImplementation((path, data, callback) => {
-      callback(null, renderedHtml);
-    });
+    const renderedHtml = '<html><body>Hello John Doe</body></html>';
+    (path.join as jest.Mock).mockReturnValue(
+      __dirname + `/templates/${template}.ejs`,
+    );
 
     await service.send(template, to, subject, data);
-
-    expect(ejs.renderFile).toHaveBeenCalledWith(
-      path.join(__dirname, 'email', 'templates', `${template}.ejs`),
-      data,
-      expect.any(Function),
-    );
 
     expect(sgMail.send).toHaveBeenCalledWith({
       from: 'Default Sender <default@example.com>',
       to,
       subject,
       html: renderedHtml,
-      text: expect.any(String),
+      text: 'Hello John Doe',
     });
   });
 
@@ -98,10 +95,9 @@ describe('EmailService', () => {
     const data = { name: 'John Doe' };
 
     const error = new Error('Send failed');
-    (ejs.renderFile as jest.Mock).mockImplementation((path, data, callback) => {
-      callback(null, '<html>Test</html>');
-    });
-
+    (path.join as jest.Mock).mockReturnValue(
+      __dirname + `/templates/${template}.ejs`,
+    );
     (sgMail.send as jest.Mock).mockRejectedValue(error);
 
     await service.send(template, to, subject, data);
